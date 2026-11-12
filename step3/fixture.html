@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8" /><title>fixture</title></head>
+<body style="margin:0;background:#111;color:#0f0;font:16px monospace;padding:20px">
+  <div id="out">-</div>
+
+<script>
+  const t0 = performance.now();          // 页面启动时的"现在"
+
+  function render() {
+    const elapsed = performance.now() - t0;      // 从启动到现在过了多久
+    out.textContent = `${(elapsed / 1000).toFixed(3)}s | ${new Date().toISOString()}`;
+  }
+
+  render();
+  setInterval(render, 50);                        // 每 50ms 刷一次屏幕
+  window.__fixtureRender = render;                // 给探针留个手动刷新入口
+</script>
+</body>
+</html>

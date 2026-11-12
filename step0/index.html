@@ -1,0 +1,39 @@
+<html>
+<head><meta charset="utf-8" /><title>step0 · 能翻页的网页</title>
+<style>
+    html, body {
+    margin: 0; height: 100%;
+    background: #0b0b0f;
+    display: grid; place-items: center;
+    font: 13px/1.5 ui-monospace, Menlo, monospace;
+    color: #8b8b96;
+  }
+  #stage { position: relative; width: 960px; height: 540px; background: #222; overflow: hidden; }
+.box   { position: absolute; top: 0; left: 0; width: 160px; height: 96px; }
+</style>
+</head>
+<body>
+  <div>
+    <div id="stage">
+      <div class="box" id="a">A</div>
+      <div class="box" id="b">B</div>
+      <div class="box" id="c">C</div>
+    </div>
+
+  </div>
+
+    <script>
+        const a = document.getElementById("a");
+const b = document.getElementById("b");
+const c = document.getElementById("c");
+
+function seek(t) {
+  a.style.transform = `translate(${t * 250}px, 60px)`;
+  b.style.opacity = t < 1 ? 0.2 : 1;
+  c.style.transform = `translate(400px, ${200 + t * 100}px)`;
+}
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <title>step4 · animation</title>
+  <style>
+    html, body { margin: 0; background: #0b0b12; }
+    #stage {
+      position: relative;
+      width: 960px;
+      height: 540px;
+      overflow: hidden;
+      background: radial-gradient(circle at 30% 20%, #1a1a2e 0%, #0b0b12 70%);
+    }
+    .track {
+      position: absolute;
+      left: 80px; right: 80px; top: 50%;
+      height: 2px; margin-top: -1px;
+      background: linear-gradient(90deg,
+        rgba(110,231,255,0.06),
+        rgba(168,85,247,0.35),
+        rgba(110,231,255,0.06));
+    }
+    #box {
+      position: absolute;
+      left: 80px; top: 50%;
+      width: 96px; height: 96px; margin-top: -48px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #6ee7ff 0%, #a855f7 100%);
+      box-shadow: 0 12px 48px rgba(110,231,255,0.35);
+      will-change: transform;
+    }
+  </style>
+</head>
+<body>
+  <div id="stage">
+    <div class="track"></div>
+    <div id="box"></div>
+  </div>
+
+  <script>
+    // ==========================================================
+    // 「假装这是第三方库」：完全闭包，外面什么都拿不到
+    //   没有 render(t)，没有 seek(t)，没有 x
+    //   唯一的驱动源是 requestAnimationFrame
+    // ==========================================================
+    (function () {
+      const box = document.getElementById("box");
+      const SPEED = 0.25;               // 每毫秒走 0.25px（3 秒 = 750px）
+
+      let x = 0;
+      let last = null;
+
+      function tick(ts) {
+        if (last === null) last = ts;
+        const delta = ts - last;        // 这一帧过了多久
+        last = ts;
+
+        x += delta * SPEED;
+        box.style.transform = `translateX(${x}px)`;
+
+        requestAnimationFrame(tick);    // ← 自己约下一帧，永不停
+      }
+
+      requestAnimationFrame(tick);
+    })();
+
+    // ==========================================================
+    // 契约：只有「我多长」和「跳过去」两件事
+    // 注意 seek 里只能拨表 —— 没有任何动画状态可以改
+    // ==========================================================
+    window.__hf = {
+      duration: 3,
+      seek(t) {
+        window.__vc.seekToTime(t * 1000);   // 秒 → 毫秒
+      },
+    };
+  </script>
+</body>
+</html>
